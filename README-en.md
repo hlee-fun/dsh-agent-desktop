@@ -2,7 +2,7 @@
 
 [简体中文](./README.md) | **English**
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.1-green)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.2-green)
 
 DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads and operates desktop applications through OS accessibility trees (Windows UI Automation / macOS AX / Linux AT-SPI) — no screenshots, no pixel matching.
 

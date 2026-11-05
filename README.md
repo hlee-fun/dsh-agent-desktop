@@ -2,7 +2,7 @@
 
 **中文** | [English](./README-en.md)
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.1-green)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.2-green)
 
 DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基于操作系统无障碍树（Windows UI Automation / macOS AX / Linux AT-SPI）读取并操作桌面应用，不依赖截图与像素识别。
 
