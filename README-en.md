@@ -1,70 +1,115 @@
 # dsh-agent-desktop
 
-**[简体中文](./README.md)** | English
+[简体中文](./README.md) | **English**
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.0-green)
 
-Desktop automation for AI agents as a DeepSeek Harness (DSH) plugin, powered by [agent-desktop](https://github.com/vercel-labs/agent-desktop) — reliable operation of desktop apps through OS accessibility trees.
-
-> **Built on [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) v1.2.0. The upstream project is copyright Vercel and its contributors, licensed under Apache License 2.0. This bridge plugin follows the same Apache License 2.0.**
+DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads and operates desktop applications through OS accessibility trees (Windows UI Automation / macOS AX / Linux AT-SPI) — no screenshots, no pixel matching.
 
 ## Features
 
-The plugin registers an `agent_desktop` tool namespace in DSH with **17 tools**:
+- Registers the `agent_desktop` tool namespace with **17 tools**
+- Covers the computer-use loop: **observe** (snapshot / find / get) → **act** (click / type_text / set_value / press / scroll / select / focus) → **verify** (screenshot / snapshot)
+- Native binary fetched automatically on install or first call, then cached
+- Structured errors (`error.code` + `disposition.retry`) so agents can retry safely
 
-| Tool | Description |
-|------|-------------|
-| `status` | Adapter health, platform info, permission state |
-| `snapshot` | Read a window's accessibility tree; returns JSON with `@ref` handles |
-| `find` | Search elements by role / name / value / text |
-| `get` | Read an element property (text / value / title / bounds / role / states) |
-| `click` | Click an element via its accessibility action |
-| `type_text` | Type text into a target (Windows: delivered via clipboard + Ctrl+V) |
-| `set_value` | Set an element value directly through the accessibility attribute |
-| `focus` | Bring an application window to the foreground |
-| `focus_element` | Set keyboard focus on an element |
-| `press` | Send a key combo (return / escape / ctrl+c / ...) |
-| `wait` | Wait for an element, text, or window to appear |
-| `scroll` | Scroll an element (direction + amount) |
-| `select` | Select an option in a list or dropdown |
-| `list_windows` | List all visible windows |
-| `launch` | Launch an application and wait for its process |
-| `clipboard_get` | Read plain-text clipboard contents |
-| `clipboard_set` | Write text to the clipboard |
+## Requirements
+
+| Platform | Architecture |
+|----------|--------------|
+| Windows | x64 |
+| macOS | arm64 / x64 |
+| Linux | x64 |
+
+- DSH desktop app installed (it ships its own CLI and Node runtime — **no separate Node.js / npm needed**)
+- Network access to GitHub (plugin install + first native-binary download)
 
 ## Install
 
-### Prerequisites
+> **Invoking the DSH CLI**: `dsh` is not on the system PATH; it lives at `<DSH install dir>/resources/runtime/cli/bin/` (`dsh.cmd` on Windows, `dsh` on macOS/Linux). Add that directory to PATH, or replace `dsh` below with the full path on your machine — install locations differ; never copy someone else's absolute path.
 
-- DSH desktop app installed (it ships its own CLI and Node runtime — **no separate Node.js / npm install needed**)
-- Network access to GitHub (for the plugin itself and the first native-binary download)
-
-> **Invoking the DSH CLI**: `dsh` is not on the system PATH; it lives inside the app at
-> `<DSH install dir>/resources/runtime/cli/bin/` (`dsh.cmd` on Windows, `dsh` on macOS/Linux).
-> Add that directory to your PATH, or replace `dsh` in the examples below with the full path on your machine — **the install location differs per machine; never copy an absolute path verbatim**.
-
-### Option 1: one command, straight from GitHub
+**Option 1: one command from GitHub**
 
 ```bash
 dsh plugin --profile desktop add github:hlee/dsh-agent-deskto
 ```
 
-Pinned to a tag (recommended, reproducible):
+Pinned to a tag (reproducible):
 
 ```bash
 dsh plugin --profile desktop add git+https://github.com/hlee/dsh-agent-deskto.git#v1.2.0
 ```
 
-### Option 2: clone first, then install from the local directory
+**Option 2: clone, then install from the local directory**
 
 ```bash
 git clone https://github.com/hlee/dsh-agent-deskto.git
 dsh plugin --profile desktop add ./dsh-agent-deskto
 ```
 
-On install, the `postinstall` script downloads the platform-matched `agent-desktop` native binary from [GitHub Releases](https://github.com/vercel-labs/agent-desktop/releases) into `bin/` and caches it; if it is missing at first use, it is fetched automatically.
+**Restart the DSH app** after installing for the plugin layer to take effect.
 
-> **Bundle-layer declaration**: `package.json` declares `dsh.bundle.patch` pointing to `cordis.patch.yml` (`insert: id=agent-desktop, name=dsh-agent-desktop`). The host uses this to place the plugin into the `dsh.profile.bundles` layer stack. Without the declaration, `dsh plugin add` installs it as a plain dependency with a "declares no dsh.bundle" warning and the tools never mount.
+## Quick Start
+
+The standard agent loop for operating a desktop app:
+
+```
+list_windows → snapshot(windowId) → find / get (locate elements)
+    → click / type_text / set_value / press (act)
+    → snapshot / screenshot (verify)
+```
+
+## Tool Reference
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `status` | — | Platform, permissions, adapter health |
+| `snapshot` | `app?` `windowId?` `depth?` | Read a window's accessibility tree; returns JSON with `@ref` handles |
+| `find` | `role?` `name?` `value?` `text?` | Search elements by criteria |
+| `get` | `ref` `property?` | Read an element property (text/value/title/bounds/role/states) |
+| `click` | `ref` | Click an element via its accessibility action |
+| `type_text` | `ref` `text` | Type into a text target (Windows: delivered via clipboard automatically) |
+| `set_value` | `ref` `value` | Set an element value directly through the accessibility attribute |
+| `press` | `key` | Key combos: `return` `escape` `tab` `space` `delete` arrows `f1-f12`; modifiers `ctrl/alt/shift` |
+| `wait` | `element?` `text?` `window?` `timeout?` | Wait for an element / text / window (default 30 s) |
+| `scroll` | `ref` `direction?` `amount?` | Scroll (target must support the Scroll action) |
+| `select` | `ref` `value` | Select an option in a list or dropdown |
+| `focus` | `app` | Bring an application window to the foreground |
+| `focus_element` | `ref` | Set keyboard focus on an element |
+| `screenshot` | `app?` `windowId?` `region?` | Capture a screenshot; returns base64 PNG |
+| `list_windows` | `app?` | List visible windows (source of `windowId`) |
+| `launch` | `app?` `activate?` | Launch an application |
+| `clipboard_get` | — | Read plain-text clipboard contents |
+| `clipboard_set` | `text` | Write text to the clipboard |
+
+**Ref rules**: `snapshot` yields handles shaped `@<snapshot_id>:eN` used by all element actions. Handles expire when the UI changes (`STALE_REF` / `AMBIGUOUS_TARGET`) — re-snapshot before acting.
+
+**Examples**:
+
+```json
+// snapshot: always pass windowId (from list_windows; pick the main window — the one with large bounds)
+{ "windowId": "w-197510" }
+
+// type_text: write into the chat input
+{ "ref": "@s3mqlcadl5xc1g:e193", "text": "hello world" }
+
+// press: send with Enter
+{ "key": "return" }
+
+// scroll: one unit down (target available_actions must include Scroll)
+{ "ref": "@s3mqlcadl5xc1g:e283", "direction": "down", "amount": 1 }
+```
+
+## Troubleshooting
+
+| Symptom | Cause and fix |
+|---------|----------------|
+| `type_text` returns `POLICY_DENIED` or text does not land | On Windows, Chromium/Electron inputs ignore physical keystroke delivery; this plugin automatically delivers via **clipboard + Ctrl+V** (verified end-to-end). If it still fails, use `set_value` |
+| `WINDOW_NOT_FOUND` | No focused window: call `list_windows`, take the large-bounds main window, pass `windowId` to `snapshot` |
+| `ACTION_NOT_SUPPORTED` (scroll/select) | Target element lacks the action: pick a container whose `available_actions` include `Scroll` / `Select` |
+| Keystrokes swallowed by a popup | DSH global shortcuts (e.g. Ctrl+A) open a search overlay that steals focus: `press` `escape` first |
+| Install warns `declares no dsh.bundle` | `package.json` lost its `dsh.bundle` declaration, so the plugin will not mount. Shipped here via `cordis.patch.yml` — keep it when forking |
+| macOS permission missing | System Settings → Privacy & Security → Accessibility, grant and retry |
 
 ## Uninstall
 
@@ -72,164 +117,8 @@ On install, the `postinstall` script downloads the platform-matched `agent-deskt
 dsh plugin --profile desktop remove dsh-agent-desktop
 ```
 
-Or manually:
+## Upstream & License
 
-```bash
-# 1. remove from the profile bundles
-dsh plugin --profile desktop remove dsh-agent-desktop
+This project is a **bridge layer**; no upstream code is modified. Built on [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) v1.2.0 (Apache-2.0), copyright Vercel and its contributors; this plugin is likewise released under [Apache-2.0](./LICENSE).
 
-# 2. delete the cloned directory (optional; adjust to the actual directory name)
-rm -rf dsh-agent-deskto
-```
-
-## Usage
-
-All tools are invoked by the DSH agent under the `agent_desktop` namespace. Parameter examples:
-
-### status
-
-No parameters. Returns platform, permissions and version:
-
-```json
-{ "ok": true, "data": { "platform": "windows", "permissions": { "accessibility": { "state": "granted" } }, "version": "1.2.0" } }
-```
-
-### snapshot
-
-Reads the accessibility tree. **Always pass `windowId`** (from `list_windows`) to avoid capturing the wrong foreground window:
-
-```json
-{ "windowId": "w-197510" }
-```
-
-Every actionable element carries a `ref_id` (e.g. `@s3mqlcadl5xc1g:e193`) and `available_actions`. All later element actions use this ref. Refs expire when the UI changes — take a fresh snapshot before acting.
-
-### find
-
-```json
-{ "role": "button", "text": "OK" }
-```
-
-### get
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e23", "property": "text" }
-```
-
-### click
-
-Semantic delivery via the element's accessibility action:
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e11" }
-```
-
-### type_text
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e193", "text": "hello world" }
-```
-
-> **Windows delivery**: Chromium/Electron DOM inputs ignore the CLI's `SendInput` physical typing (the a11y value never updates), and `press` only accepts named keys (punctuation like `-` or `!` returns INVALID_ARGS). On Windows this tool therefore uses **focus → clipboard-set → press ctrl+v** uniformly (verified end-to-end: messages really send). Non-Windows keeps native `type --headed`. A live CJK IME can garble per-character keystrokes; the clipboard path is immune.
-
-### set_value
-
-Direct `ValuePattern.SetValue` — no physical focus needed; the most reliable way to write values on Windows:
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e23", "value": "search text" }
-```
-
-### focus (window-level)
-
-```json
-{ "app": "DeepSeek Harness" }
-```
-
-### focus_element (element-level)
-
-Uses `--headed` physical delivery on Windows:
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e193" }
-```
-
-### press
-
-Named keys: `return` `escape` `tab` `space` `delete` `up` `down` `left` `right` `f1`-`f12`; modifiers: `ctrl` `alt` `shift`:
-
-```json
-{ "key": "ctrl+v" }
-```
-
-### wait
-
-Default timeout 30 s:
-
-```json
-{ "element": "@s3mqlcadl5xc1g:e9", "timeout": 5000 }
-```
-
-### scroll
-
-The target must expose the Scroll action (list/document containers do; buttons don't):
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e283", "direction": "down", "amount": 1 }
-```
-
-Otherwise returns `ACTION_NOT_SUPPORTED`.
-
-### select
-
-```json
-{ "ref": "@s3mqlcadl5xc1g:e297", "value": "option text" }
-```
-
-### list_windows
-
-Use this to obtain the `windowId` for `snapshot`. Note: DSH may expose several windows; the main window is the large one (filter by bounds):
-
-```json
-{ "app": "DeepSeek Harness" }
-```
-
-### launch
-
-```json
-{ "app": "notepad", "activate": true }
-```
-
-### clipboard_get / clipboard_set
-
-```json
-// clipboard_set
-{ "text": "text to copy" }
-
-// clipboard_get
-{}
-```
-
-## Typical Workflow
-
-```
-list_windows → snapshot(--window-id) → find/get (locate elements)
-    → click / set_value / type_text (act) → snapshot (verify)
-```
-
-## Notes
-
-- **Architecture**: `child_process.spawn` into the agent-desktop Rust CLI, which reads and drives the UI through OS accessibility APIs (Windows UI Automation / macOS AX / Linux AT-SPI). No screenshots, no pixel matching.
-- **Ref lifecycle**: `@ref` handles belong to one snapshot and expire on UI changes (STALE_REF / AMBIGUOUS_TARGET). Re-snapshot before acting.
-- **Delivery modes**: semantic (accessibility APIs, headless default) vs physical (`--headed`, real pointer/keyboard events). The plugin auto-adds `--headed` where Windows requires it.
-- **Retry semantics**: every error carries `disposition.retry` — `"safe"` means retry as-is, `"unsafe"` means observe again first.
-- **Platforms**: Windows x64 / macOS arm64 & x64 / Linux x64; the native binary (~10 MB) is downloaded automatically.
-- **Permissions**: the plugin declares `subprocess` (CLI invocation) and `filesystem-read` (binary read). macOS additionally needs Accessibility permission in System Settings.
-
-## Differences from the Upstream Project
-
-This plugin is a **bridge layer**; no agent-desktop code is modified. The upstream CLI has 65 commands; the plugin covers 17 core tools (100% of the computer-use main loop). Ungbridged commands (physical mouse operations, window resizing, notifications, etc.) remain callable directly via the CLI.
-
-## License
-
-Apache-2.0. Upstream [agent-desktop](https://github.com/vercel-labs/agent-desktop) is copyright Vercel and its contributors.
+The upstream CLI offers 65 commands; this plugin bridges the 17 core tools (full coverage of the computer-use loop). Ungbridged commands (physical mouse, window sizing, notifications, ...) remain available by invoking the CLI directly.
