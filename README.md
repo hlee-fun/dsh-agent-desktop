@@ -121,6 +121,13 @@ list_windows → snapshot(windowId) → find / get（定位元素）
 dsh plugin --profile desktop remove dsh-agent-desktop
 ```
 
+彻底清理本地残留（PowerShell；示例中 Administrator 为本机用户目录名，请替换为你的用户名，或改用 $env:USERPROFILE 形式）：
+
+```powershell
+Remove-Item -Force C:\Users\Administrator\.dsh\profiles\desktop\node_modules\dsh-agent-desktop
+Remove-Item -Recurse -Force C:\Users\Administrator\.agent-desktop
+```
+
 ## 上游与许可
 
 本项目是**桥接层**，未修改上游任何代码。基于 [vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop) v1.2.0（Apache-2.0）构建，上游版权归 Vercel 及其贡献者所有；本插件同样以 [Apache-2.0](./LICENSE) 许可发布。
