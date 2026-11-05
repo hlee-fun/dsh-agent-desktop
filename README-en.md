@@ -10,7 +10,7 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 
 - Registers the `agent_desktop` tool namespace with **17 tools**
 - Covers the computer-use loop: **observe** (snapshot / find / get) → **act** (click / type_text / set_value / press / scroll / select / focus) → **verify** (screenshot / snapshot)
-- Native binary fetched automatically on install or first call, then cached
+- Native binary fetched automatically on first tool call, then cached (no build scripts needed at install time)
 - Structured errors (`error.code` + `disposition.retry`) so agents can retry safely
 
 ## Requirements
