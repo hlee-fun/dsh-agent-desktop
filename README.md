@@ -36,9 +36,12 @@
 
 ### 前置要求
 
-- [Node.js](https://nodejs.org) ≥ 18
-- [DSH CLI](https://dsh.dev) 可用
-- 网络可访问 GitHub Releases（首次安装自动下载原生二进制）
+- 已安装 DSH 桌面应用（自带 CLI 与 Node 运行时，**无需单独安装 Node.js / npm**）
+- 网络可访问 GitHub（安装插件与首次下载原生二进制）
+
+> **DSH CLI 调用方式**：`dsh` 不在系统 PATH 中，它随应用安装在
+> `<DSH 安装目录>/resources/runtime/cli/bin/` 下（Windows 为 `dsh.cmd`，macOS/Linux 为 `dsh`）。
+> 请将该目录加入 PATH，或把下文示例中的 `dsh` 替换为你本机安装位置下的完整路径——**路径因安装位置而异，不要照抄他人机器上的绝对路径**。
 
 ### 方式一：一条命令直接从 GitHub 安装
 

@@ -36,9 +36,12 @@ The plugin registers an `agent_desktop` tool namespace in DSH with **17 tools**:
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org) ≥ 18
-- DSH CLI available
-- Network access to GitHub Releases (the native binary is downloaded automatically on first use)
+- DSH desktop app installed (it ships its own CLI and Node runtime — **no separate Node.js / npm install needed**)
+- Network access to GitHub (for the plugin itself and the first native-binary download)
+
+> **Invoking the DSH CLI**: `dsh` is not on the system PATH; it lives inside the app at
+> `<DSH install dir>/resources/runtime/cli/bin/` (`dsh.cmd` on Windows, `dsh` on macOS/Linux).
+> Add that directory to your PATH, or replace `dsh` in the examples below with the full path on your machine — **the install location differs per machine; never copy an absolute path verbatim**.
 
 ### Option 1: one command, straight from GitHub
 
