@@ -1,6 +1,6 @@
 # dsh-agent-desktop
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) [English](./README-en.md)
 
 将 [agent-desktop](https://github.com/vercel-labs/agent-desktop) 的桌面自动化能力封装为 DeepSeek Harness（DSH）插件——通过操作系统辅助功能树（Accessibility Tree）实现 AI Agent 对桌面应用的可靠操作。
 
@@ -38,18 +38,23 @@
 - [DSH CLI](https://dsh.dev) 可用
 - 网络可访问 GitHub Releases（首次安装自动下载原生二进制）
 
-### 方式一：从本地目录安装
+### 方式一：一条命令直接从 GitHub 安装
 
 ```bash
-git clone <本插件仓库> dsh-agent-desktop
-cd dsh-agent-desktop && npm install
-dsh plugin --profile desktop add file:./dsh-agent-desktop
+dsh plugin --profile desktop add github:hlee/dsh-agent-deskto
 ```
 
-### 方式二：从 npm 安装（发布后）
+锁定版本（推荐，可复现）：
 
 ```bash
-dsh plugin --profile desktop add dsh-agent-desktop
+dsh plugin --profile desktop add git+https://github.com/hlee/dsh-agent-deskto.git#v1.2.0
+```
+
+### 方式二：先拉取、再从本地目录安装
+
+```bash
+git clone https://github.com/hlee/dsh-agent-deskto.git
+dsh plugin --profile desktop add ./dsh-agent-deskto
 ```
 
 安装时 `postinstall` 脚本会自动从 [GitHub Releases](https://github.com/vercel-labs/agent-desktop/releases) 下载对应平台的 `agent-desktop` 原生二进制到 `bin/` 并缓存；首次使用时若缺失也会自动补下载。
@@ -68,8 +73,8 @@ dsh plugin --profile desktop remove dsh-agent-desktop
 # 1. 从 profile 的 bundles 中移除
 dsh plugin --profile desktop remove dsh-agent-desktop
 
-# 2. 删除本地目录（可选）
-rm -rf dsh-agent-desktop
+# 2. 删除本地克隆目录（可选，按实际目录名）
+rm -rf dsh-agent-deskto
 ```
 
 ## 各功能使用

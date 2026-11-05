@@ -11,8 +11,7 @@
     "lib",
     "bin",
     "scripts",
-    "locale",
-    "docs"
+    "locale"
   ],
   "os": [
     "darwin",

@@ -5,3 +5,7 @@ snapshot_tmp.json
 snapshot_tmp.err
 shot_*.png
 snap*.json
+
+# 本地测试与报告不入库
+test_*.js
+docs/VERIFICATION-REPORT.md
