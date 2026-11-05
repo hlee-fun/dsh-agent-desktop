@@ -31,20 +31,20 @@ DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基
 **方式一：一条命令从 GitHub 安装**
 
 ```bash
-dsh plugin --profile desktop add github:hlee-fun/dsh-agent-deskto
+dsh plugin --profile desktop add github:hlee-fun/dsh-agent-desktop
 ```
 
 锁定版本（可复现）：
 
 ```bash
-dsh plugin --profile desktop add git+https://github.com/hlee-fun/dsh-agent-deskto.git#v1.2.0
+dsh plugin --profile desktop add git+https://github.com/hlee-fun/dsh-agent-desktop.git#v1.2.0
 ```
 
 **方式二：克隆后从本地目录安装**
 
 ```bash
-git clone https://github.com/hlee-fun/dsh-agent-deskto.git
-dsh plugin --profile desktop add ./dsh-agent-deskto
+git clone https://github.com/hlee-fun/dsh-agent-desktop.git
+dsh plugin --profile desktop add ./dsh-agent-desktop
 ```
 
 安装完成后**重启 DSH 应用**使插件层生效。
