@@ -4,9 +4,15 @@ import("./lib/index.js").then(async (m) => {
   m.default(ctx);
   const ad = tools.agent_desktop;
   const results = [];
+  const winList = await ad.list_windows({ app: "DeepSeek Harness" });
+  // DSH can expose several windows (tooltips/popups); the main window is the
+  // large one (chat input only exists there).
+  const big = (winList.data || []).filter(w => w.bounds && w.bounds.width > 800 && w.bounds.height > 500);
+  const WIN_ID = big.length ? big[0].id : undefined;
+  console.log("DSH window id:", WIN_ID);
 
   // Fresh snapshot for all ref-based tests
-  const snap = await ad.snapshot({ windowId: 'w-197510' });
+  const snap = await ad.snapshot({ windowId: WIN_ID });
   const sid = snap.data.snapshot_id;
   console.log("Fresh snapshot:", sid, "refs:", snap.data.ref_count);
 
@@ -55,11 +61,16 @@ import("./lib/index.js").then(async (m) => {
   try { const r = await ad.click({ ref: buttons[0] }); results.push(['click', r.ok, '']); console.log("OK"); }
   catch(e) { results.push(['click', false, e.message.slice(0,80)]); console.log("FAIL", e.message.slice(0,80)); }
 
-  // 7. type_text --headed (fresh textfield ref)
-  console.log("\n=== 7. type_text (--headed) ===");
+  // 7. type_text --headed (prefer the real chat input over the search box)
+  console.log("\n=== 7. type_text (--headed + auto pre-focus) ===");
   try {
+    let typedRef = textfields[0];
+    const chatField = [];
+    const walkC = (n) => { if (n?.ref_id && /textfield/i.test(String(n.role)) && /发消息|发送|输入/.test(String(n.name||''))) chatField.push(n.ref_id); for (const c of (n?.children||[])) walkC(c); };
+    walkC(snap.data?.tree);
+    if (chatField.length > 0) typedRef = chatField[0];
     if (textfields.length > 0) {
-      const r = await ad.type_text({ ref: textfields[0], text: 'full-test' });
+      const r = await ad.type_text({ ref: typedRef, text: 'full-test' });
       results.push(['type_text', r.ok, r.error?.code || '']);
       console.log(r.ok ? "OK" : "FAIL", r.error?.code || '');
     } else { results.push(['type_text', false, 'no textfield']); console.log("SKIP"); }
@@ -77,7 +88,7 @@ import("./lib/index.js").then(async (m) => {
 
   // 9. screenshot --window-id
   console.log("\n=== 9. screenshot --window-id ===");
-  try { const r = await ad.screenshot({ windowId: 'w-197510' }); results.push(['screenshot', r.ok, '']); console.log("OK len:", r.data?.data?.length); }
+  try { const r = await ad.screenshot({ windowId: WIN_ID }); results.push(['screenshot', r.ok, '']); console.log("OK len:", r.data?.data?.length); }
   catch(e) { results.push(['screenshot', false, e.message.slice(0,80)]); console.log("FAIL"); }
 
   // 10. focus (window-level)
@@ -135,7 +146,7 @@ import("./lib/index.js").then(async (m) => {
   console.log("\n=== 17. select ===");
   try {
     if (selectables.length > 0) {
-      const r = await ad.select({ ref: selectables[0] });
+      const r = await ad.select({ ref: selectables[0], value: '默认' });
       results.push(['select', r.ok, r.error?.code || '']);
       console.log(r.ok ? "OK" : "FAIL", r.error?.code || '');
     } else { results.push(['select', false, 'no selectable']); console.log("SKIP no selectable in DSH window"); }

@@ -1,0 +1,8 @@
+# dsh bundle patch: inserts this plugin into a profile's layer stack.
+# Mounted when the profile's package.json lists dsh-agent-desktop in
+# dsh.profile.bundles (dsh plugin --profile <name> add ...); the loader
+# resolves `name` from the profile's node_modules -> package exports
+# (".") -> lib/index.js, which registers the agent_desktop tool namespace.
+- insert:
+    - id: agent-desktop
+      name: dsh-agent-desktop

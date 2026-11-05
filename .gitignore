@@ -3,3 +3,5 @@ bin/
 *.tmp
 snapshot_tmp.json
 snapshot_tmp.err
+shot_*.png
+snap*.json

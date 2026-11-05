@@ -17,7 +17,7 @@
 | `find` | 按 role / name / value / text 搜索元素 |
 | `get` | 读取元素属性（text / value / title / bounds / role / states） |
 | `click` | 通过可访问性动作点击元素 |
-| `type_text` | 向文本目标输入文字（Windows 使用物理投递） |
+| `type_text` | 向文本目标输入文字（Windows 经剪贴板+Ctrl+V 投递） |
 | `set_value` | 通过可访问性属性直接设置元素值 |
 | `focus` | 将应用窗口置于前台 |
 | `focus_element` | 为元素设置键盘焦点 |
@@ -53,6 +53,8 @@ dsh plugin --profile desktop add dsh-agent-desktop
 ```
 
 安装时 `postinstall` 脚本会自动从 [GitHub Releases](https://github.com/vercel-labs/agent-desktop/releases) 下载对应平台的 `agent-desktop` 原生二进制到 `bin/` 并缓存；首次使用时若缺失也会自动补下载。
+
+> **Bundle 层声明**：`package.json` 的 `dsh.bundle.patch` 指向 `cordis.patch.yml`（`insert: id=agent-desktop, name=dsh-agent-desktop`）。宿主加载 profile 时据此把插件写入 `dsh.profile.bundles` 层栈——缺少该声明时 `dsh plugin add` 只会装成普通依赖并警告 "declares no dsh.bundle"，工具不会挂载。
 
 ## 卸载
 
@@ -119,13 +121,13 @@ rm -rf dsh-agent-desktop
 
 ### type_text
 
-向文本目标输入文字。Windows 上使用物理投递（`--headed`），要求目标元素在投递期间保持焦点：
+向文本目标输入文字：
 
 ```json
 { "ref": "@s3mqlcadl5xc1g:e193", "text": "你好，世界" }
 ```
 
-> **Windows 注意**：若报 `Target element lost focus before physical input delivery`，请先用 `focus_element` 聚焦目标，或改用 `set_value` / `clipboard_set + press("ctrl+v")`。
+> **Windows 投递机制**：Chromium/Electron 应用的 DOM 输入框会忽略 CLI 的 `SendInput` 物理投递（a11y value 不更新），且 `press` 仅支持命名键（`-`、`!` 等标点会报 INVALID_ARGS）。因此本工具在 Windows 上统一走 **focus → clipboard-set → press ctrl+v** 路径（已实测消息可上屏）；非 Windows 保持原生 `type --headed`。若系统开着中文输入法，逐字符按键可能被 IME 误转，剪贴板路径不受影响。
 
 ### set_value
 
