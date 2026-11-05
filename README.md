@@ -2,7 +2,7 @@
 
 **中文** | [English](./README-en.md)
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.0-green)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.1-green)
 
 DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基于操作系统无障碍树（Windows UI Automation / macOS AX / Linux AT-SPI）读取并操作桌面应用，不依赖截图与像素识别。
 
@@ -10,7 +10,7 @@ DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基
 
 - 注册 `agent_desktop` 工具命名空间，共 **17 个工具**
 - 覆盖计算机操作核心循环：**观察**（snapshot / find / get）→ **操作**（click / type_text / set_value / press / scroll / select / focus）→ **验证**（screenshot / snapshot）
-- 原生二进制零配置：首次调用任一工具时自动从上游 Releases 下载并缓存（安装阶段无需构建脚本）
+- 原生二进制随装随取：安装或首次调用时自动从上游 Releases 下载并缓存
 - 结构化错误返回（`error.code` + `disposition.retry`），Agent 可据此安全重试
 
 ## 系统要求
@@ -26,18 +26,11 @@ DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基
 
 ## 安装
 
-> **DSH CLI 调用方式**：`dsh` 不在系统 PATH，位于 `<DSH 安装目录>/resources/runtime/cli/bin/`（Windows 为 `dsh.cmd`，macOS/Linux 为 `dsh`）。请将此目录加入 PATH，或将下文示例中的 `dsh` 替换为你本机的完整路径——安装位置因机器而异，不要照抄他人的绝对路径。
 
 **方式一：一条命令从 GitHub 安装**
 
 ```bash
 dsh plugin --profile desktop add github:hlee-fun/dsh-agent-desktop
-```
-
-锁定版本（可复现）：
-
-```bash
-dsh plugin --profile desktop add git+https://github.com/hlee-fun/dsh-agent-desktop.git#v1.2.0
 ```
 
 **方式二：克隆后从本地目录安装**

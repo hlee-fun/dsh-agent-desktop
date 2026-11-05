@@ -2,7 +2,7 @@
 
 [简体中文](./README.md) | **English**
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.0-green)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg) ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey) ![Release](https://img.shields.io/badge/release-v1.2.1-green)
 
 DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads and operates desktop applications through OS accessibility trees (Windows UI Automation / macOS AX / Linux AT-SPI) — no screenshots, no pixel matching.
 
@@ -10,7 +10,7 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 
 - Registers the `agent_desktop` tool namespace with **17 tools**
 - Covers the computer-use loop: **observe** (snapshot / find / get) → **act** (click / type_text / set_value / press / scroll / select / focus) → **verify** (screenshot / snapshot)
-- Native binary fetched automatically on first tool call, then cached (no build scripts needed at install time)
+- Native binary fetched automatically on install or first call, then cached
 - Structured errors (`error.code` + `disposition.retry`) so agents can retry safely
 
 ## Requirements
@@ -26,18 +26,11 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 
 ## Install
 
-> **Invoking the DSH CLI**: `dsh` is not on the system PATH; it lives at `<DSH install dir>/resources/runtime/cli/bin/` (`dsh.cmd` on Windows, `dsh` on macOS/Linux). Add that directory to PATH, or replace `dsh` below with the full path on your machine — install locations differ; never copy someone else's absolute path.
 
 **Option 1: one command from GitHub**
 
 ```bash
 dsh plugin --profile desktop add github:hlee-fun/dsh-agent-desktop
-```
-
-Pinned to a tag (reproducible):
-
-```bash
-dsh plugin --profile desktop add git+https://github.com/hlee-fun/dsh-agent-desktop.git#v1.2.0
 ```
 
 **Option 2: clone, then install from the local directory**
