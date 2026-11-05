@@ -26,10 +26,10 @@ function getPlatformKey() {
 
 function tarballName(key) {
   const map = {
-    'darwin-arm64': 'agent-desktop-aarch64-apple-darwin.tar.gz',
-    'darwin-x64': 'agent-desktop-x86_64-apple-darwin.tar.gz',
-    'win32-x64': 'agent-desktop-x86_64-pc-windows-msvc.zip',
-    'linux-x64': 'agent-desktop-x86_64-unknown-linux-gnu.tar.gz',
+    'darwin-arm64': 'agent-desktop-v1.2.0-aarch64-apple-darwin.tar.gz',
+    'darwin-x64': 'agent-desktop-v1.2.0-x86_64-apple-darwin.tar.gz',
+    'win32-x64': 'agent-desktop-v1.2.0-x86_64-pc-windows-msvc.tar.gz',
+    'linux-x64': 'agent-desktop-v1.2.0-x86_64-unknown-linux-gnu.tar.gz',
   };
   return map[key];
 }
@@ -68,11 +68,7 @@ function main() {
 
   log('Extracting...');
   try {
-    if (tarball.endsWith('.zip')) {
-      execFileSync('unzip', ['-o', tmpFile, '-d', binDir], { stdio: 'pipe' });
-    } else {
-      execFileSync('tar', ['-xzf', tmpFile, '-C', binDir], { stdio: 'pipe' });
-    }
+    execFileSync('tar', ['-xzf', tmpFile, '-C', binDir], { stdio: 'pipe' });
   } catch (err) {
     log('Extraction failed: ' + err.message);
     process.exitCode = 1;

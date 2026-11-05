@@ -61,6 +61,10 @@
                   "type": "string",
                   "description": "Target application name (optional)"
                 },
+                "windowId": {
+                  "type": "string",
+                  "description": "Target window ID from list_windows (optional)"
+                },
                 "depth": {
                   "type": "integer",
                   "description": "Tree depth limit (optional)"
@@ -86,7 +90,7 @@
           },
           {
             "name": "type_text",
-            "description": "Type text into an element by ref.",
+            "description": "Type text into an element by ref. On Windows uses physical delivery (--headed).",
             "parameters": {
               "type": "object",
               "properties": {
@@ -111,6 +115,14 @@
             "parameters": {
               "type": "object",
               "properties": {
+                "app": {
+                  "type": "string",
+                  "description": "Target application name (optional)"
+                },
+                "windowId": {
+                  "type": "string",
+                  "description": "Target window ID from list_windows (optional)"
+                },
                 "region": {
                   "type": "string",
                   "description": "Region: 'full' or 'window' (optional)"
@@ -120,7 +132,7 @@
           },
           {
             "name": "focus",
-            "description": "Focus an application window.",
+            "description": "Focus an application window by name.",
             "parameters": {
               "type": "object",
               "properties": {
@@ -131,6 +143,219 @@
               },
               "required": [
                 "app"
+              ]
+            }
+          },
+          {
+            "name": "focus_element",
+            "description": "Set keyboard focus on an element by ref. On Windows uses physical delivery (--headed).",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref from snapshot"
+                }
+              },
+              "required": [
+                "ref"
+              ]
+            }
+          },
+          {
+            "name": "find",
+            "description": "Search elements by role, name, value, or text content.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "description": "Role filter (e.g. button, textfield)"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Text content filter"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name filter"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value filter"
+                }
+              }
+            }
+          },
+          {
+            "name": "get",
+            "description": "Read an element property (text, value, title, bounds, role, states).",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref from snapshot"
+                },
+                "property": {
+                  "type": "string",
+                  "description": "Property name (text, value, title, bounds, role, states)"
+                }
+              },
+              "required": [
+                "ref"
+              ]
+            }
+          },
+          {
+            "name": "press",
+            "description": "Send a key combo: return, escape, cmd+c, shift+tab ...",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "Key combo (e.g. return, escape, ctrl+c)"
+                }
+              },
+              "required": [
+                "key"
+              ]
+            }
+          },
+          {
+            "name": "wait",
+            "description": "Wait for element presence, text, or window appearance.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "element": {
+                  "type": "string",
+                  "description": "Element ref to wait for"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Text to wait for"
+                },
+                "timeout": {
+                  "type": "integer",
+                  "description": "Timeout in milliseconds (default 30000)"
+                }
+              }
+            }
+          },
+          {
+            "name": "scroll",
+            "description": "Scroll an element.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref to scroll"
+                },
+                "direction": {
+                  "type": "string",
+                  "description": "Direction: up, down, left, right"
+                },
+                "amount": {
+                  "type": "integer",
+                  "description": "Scroll amount"
+                }
+              },
+              "required": [
+                "ref"
+              ]
+            }
+          },
+          {
+            "name": "set_value",
+            "description": "Set element value directly via accessibility attribute.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value to set"
+                }
+              },
+              "required": [
+                "ref",
+                "value"
+              ]
+            }
+          },
+          {
+            "name": "select",
+            "description": "Select an option in a list or dropdown.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Option value to select"
+                }
+              },
+              "required": [
+                "ref"
+              ]
+            }
+          },
+          {
+            "name": "list_windows",
+            "description": "List all visible windows.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string",
+                  "description": "Filter by application name (optional)"
+                }
+              }
+            }
+          },
+          {
+            "name": "launch",
+            "description": "Launch application and return once its process is running.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string",
+                  "description": "Application name to launch"
+                },
+                "activate": {
+                  "type": "boolean",
+                  "description": "Wait for a window to appear"
+                }
+              }
+            }
+          },
+          {
+            "name": "clipboard_get",
+            "description": "Read plain-text clipboard contents."
+          },
+          {
+            "name": "clipboard_set",
+            "description": "Write text to the clipboard.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Text to write to clipboard"
+                }
+              },
+              "required": [
+                "text"
               ]
             }
           }
