@@ -1,6 +1,8 @@
 # dsh-agent-desktop
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) [简体中文](./README.md)
+**[简体中文](./README.md)** | English
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 
 Desktop automation for AI agents as a DeepSeek Harness (DSH) plugin, powered by [agent-desktop](https://github.com/vercel-labs/agent-desktop) — reliable operation of desktop apps through OS accessibility trees.
 

@@ -1,6 +1,8 @@
 # dsh-agent-desktop
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) [English](./README-en.md)
+**中文** | [English](./README-en.md)
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 
 将 [agent-desktop](https://github.com/vercel-labs/agent-desktop) 的桌面自动化能力封装为 DeepSeek Harness（DSH）插件——通过操作系统辅助功能树（Accessibility Tree）实现 AI Agent 对桌面应用的可靠操作。
 
