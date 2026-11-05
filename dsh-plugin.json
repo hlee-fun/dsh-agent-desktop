@@ -1,0 +1,141 @@
+{
+  "$schema": "https://raw.githubusercontent.com/T-Auto/dsh-std/8a15541117cb3c13ddb8f2468308691b6051d162/packages/manifest/schema/dsh-plugin-0.15.schema.json",
+  "manifestVersion": "0.15",
+  "id": "agent-desktop.dsh",
+  "name": "dsh-agent-desktop",
+  "version": "1.2.0",
+  "license": "Apache-2.0",
+  "facets": {
+    "host": {
+      "entry": "lib/index.js",
+      "apiVersion": "v1alpha1"
+    }
+  },
+  "requires": {
+    "contracts": [
+      {
+        "apiVersion": "tools.dsh/v1alpha1",
+        "kind": "Tool"
+      }
+    ]
+  },
+  "permissions": [
+    {
+      "name": "agent-desktop.subprocess",
+      "scope": "subprocess",
+      "reason": "Invoke agent-desktop CLI to read accessibility trees and perform desktop actions."
+    },
+    {
+      "name": "agent-desktop.fs.read",
+      "scope": "filesystem-read",
+      "reason": "Read the native agent-desktop binary and platform adapters."
+    }
+  ],
+  "contributes": {
+    "x-display": [
+      {
+        "icon": "./docs/assets/icon.png",
+        "title": "dsh-agent-desktop",
+        "description": "Computer use for AI agents via OS accessibility trees.",
+        "locales": [
+          "locale/en.json",
+          "locale/zh.json"
+        ]
+      }
+    ],
+    "x-tool-namespaces": [
+      {
+        "namespace": "agent_desktop",
+        "tools": [
+          {
+            "name": "status",
+            "description": "Check platform, permissions, and supported surfaces."
+          },
+          {
+            "name": "snapshot",
+            "description": "Read the accessibility tree of the active window and return JSON with refs.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string",
+                  "description": "Target application name (optional)"
+                },
+                "depth": {
+                  "type": "integer",
+                  "description": "Tree depth limit (optional)"
+                }
+              }
+            }
+          },
+          {
+            "name": "click",
+            "description": "Click an element by ref.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref from snapshot"
+                }
+              },
+              "required": [
+                "ref"
+              ]
+            }
+          },
+          {
+            "name": "type_text",
+            "description": "Type text into an element by ref.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "ref": {
+                  "type": "string",
+                  "description": "Element ref from snapshot"
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Text to type"
+                }
+              },
+              "required": [
+                "ref",
+                "text"
+              ]
+            }
+          },
+          {
+            "name": "screenshot",
+            "description": "Capture a screenshot of the active window or full screen.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "region": {
+                  "type": "string",
+                  "description": "Region: 'full' or 'window' (optional)"
+                }
+              }
+            }
+          },
+          {
+            "name": "focus",
+            "description": "Focus an application window.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "app": {
+                  "type": "string",
+                  "description": "Application name"
+                }
+              },
+              "required": [
+                "app"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

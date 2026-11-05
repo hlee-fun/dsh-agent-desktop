@@ -1,0 +1,38 @@
+{
+  "name": "dsh-agent-desktop",
+  "version": "1.2.0",
+  "description": "Computer use for AI agents via OS accessibility trees, as a DeepSeek Harness plugin.",
+  "type": "module",
+  "main": "lib/index.js",
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "files": [
+    "lib",
+    "bin",
+    "scripts",
+    "locale",
+    "docs"
+  ],
+  "os": [
+    "darwin",
+    "win32",
+    "linux"
+  ],
+  "cpu": [
+    "arm64",
+    "x64"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "computer-use",
+    "accessibility"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vercel-labs/agent-desktop.git"
+  }
+}
