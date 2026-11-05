@@ -31,19 +31,19 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 **Option 1: one command from GitHub**
 
 ```bash
-dsh plugin --profile desktop add github:hlee/dsh-agent-deskto
+dsh plugin --profile desktop add github:hlee-fun/dsh-agent-deskto
 ```
 
 Pinned to a tag (reproducible):
 
 ```bash
-dsh plugin --profile desktop add git+https://github.com/hlee/dsh-agent-deskto.git#v1.2.0
+dsh plugin --profile desktop add git+https://github.com/hlee-fun/dsh-agent-deskto.git#v1.2.0
 ```
 
 **Option 2: clone, then install from the local directory**
 
 ```bash
-git clone https://github.com/hlee/dsh-agent-deskto.git
+git clone https://github.com/hlee-fun/dsh-agent-deskto.git
 dsh plugin --profile desktop add ./dsh-agent-deskto
 ```
 

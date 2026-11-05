@@ -32,15 +32,15 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hlee/dsh-agent-deskto.git"
+    "url": "https://github.com/hlee-fun/dsh-agent-deskto.git"
   },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
-  "homepage": "https://github.com/hlee/dsh-agent-deskto#readme",
+  "homepage": "https://github.com/hlee-fun/dsh-agent-deskto#readme",
   "bugs": {
-    "url": "https://github.com/hlee/dsh-agent-deskto/issues"
+    "url": "https://github.com/hlee-fun/dsh-agent-deskto/issues"
   }
 }
