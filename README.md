@@ -12,6 +12,7 @@ DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基
 - 覆盖计算机操作核心循环：**观察**（snapshot / find / get）→ **操作**（click / type_text / set_value / press / scroll / select / focus）→ **验证**（screenshot / snapshot）
 - 原生二进制零配置：首次调用任一工具时自动从上游 Releases 下载并缓存
 - 结构化错误返回（`error.code` + `disposition.retry`），Agent 可据此安全重试
+- 本插件桥接核心工具子集，完整能力（65 个命令：物理鼠标、窗口管理、通知、批处理等）详见原项目 [agent-desktop](https://github.com/vercel-labs/agent-desktop)
 
 ## 系统要求
 
@@ -27,15 +28,19 @@ DeepSeek Harness（DSH）插件：为 AI Agent 提供计算机操作能力。基
 ## 安装
 
 
-**方式一：一条命令安装**
+**方式一：一条命令从 GitHub 安装**
+
+web profile：
 
 ```bash
 dsh plugin --profile web add hlee-fun/dsh-agent-desktop
-
-dsh plugin --profile desktop add hlee-fun/dsh-agent-desktop
-
 dsh plugin --profile web add github:hlee-fun/dsh-agent-desktop
+```
 
+desktop profile：
+
+```bash
+dsh plugin --profile desktop add hlee-fun/dsh-agent-desktop
 dsh plugin --profile desktop add github:hlee-fun/dsh-agent-desktop
 ```
 

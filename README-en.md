@@ -12,6 +12,7 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 - Covers the computer-use loop: **observe** (snapshot / find / get) → **act** (click / type_text / set_value / press / scroll / select / focus) → **verify** (screenshot / snapshot)
 - Native binary fetched automatically on first tool call, then cached
 - Structured errors (`error.code` + `disposition.retry`) so agents can retry safely
+- This plugin bridges the core subset; the full capability set (65 commands: physical mouse, window management, notifications, batching, ...) lives in the upstream [agent-desktop](https://github.com/vercel-labs/agent-desktop)
 
 ## Requirements
 
@@ -27,15 +28,19 @@ DeepSeek Harness (DSH) plugin giving AI agents computer-use capabilities. Reads 
 ## Install
 
 
-**Option 1: one command**
+**Option 1: one command from GitHub**
+
+web profile:
 
 ```bash
 dsh plugin --profile web add hlee-fun/dsh-agent-desktop
-
-dsh plugin --profile desktop add hlee-fun/dsh-agent-desktop
-
 dsh plugin --profile web add github:hlee-fun/dsh-agent-desktop
+```
 
+desktop profile:
+
+```bash
+dsh plugin --profile desktop add hlee-fun/dsh-agent-desktop
 dsh plugin --profile desktop add github:hlee-fun/dsh-agent-desktop
 ```
 
